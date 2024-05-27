@@ -1737,6 +1737,25 @@ void argptest()
   printf(1, "arg test passed\n");
 }
 
+void getreadcounttest()
+{
+  printf(1, "getreadcount test\n");
+  char buf[10];
+  int firstreadcount = getreadcount();
+  int fd = open("README", O_RDONLY);
+  if(fd < 0){
+    printf(stdout, "error: open README failed!\n");
+    exit();
+  }
+  read(fd, buf, 10);
+  int nextgetreadcount = getreadcount();
+  if (nextgetreadcount != firstreadcount + 1) {
+    printf(stdout, "error: getreadcount failed!\n");
+    exit();
+  }
+  printf(1, "getreadcount test passed\n");
+}
+
 unsigned long randstate = 1;
 unsigned int
 rand()
@@ -1755,6 +1774,9 @@ main(int argc, char *argv[])
     exit();
   }
   close(open("usertests.ran", O_CREATE));
+
+  printf(1, "here\n");
+  getreadcounttest();
 
   argptest();
   createdelete();
@@ -1796,7 +1818,7 @@ main(int argc, char *argv[])
   bigdir(); // slow
 
   uio();
-
+  printf(1, "here\n");
   exectest();
 
   exit();
